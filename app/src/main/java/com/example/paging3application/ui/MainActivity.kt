@@ -16,6 +16,7 @@ import com.example.paging3application.models.CharacterData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -66,22 +67,22 @@ class MainActivity : AppCompatActivity() , CharacterItemInteraction {
                 }
             }
 
-
-
         }
     }
 
 
     private fun getData() {
-        lifecycleScope.launchWhenCreated {
-            viewModel.getListData().collectLatest {
-                characterAdapter.submitData(it)
+
+        lifecycleScope.launch {
+            viewModel.getListData().observe(this@MainActivity) {
+                it?.let {
+                    characterAdapter.submitData(lifecycle, it)
+                }
             }
         }
     }
 
     override fun characterItemOnclick(model: CharacterData) {
-
         Toast.makeText(this@MainActivity,model.name+" clicked",Toast.LENGTH_SHORT).show()
     }
 
