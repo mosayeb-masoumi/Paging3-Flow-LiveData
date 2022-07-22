@@ -11,13 +11,15 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.paging3application.R
 import com.example.paging3application.controller.CharacterAdapter
+import com.example.paging3application.controller.CharacterItemInteraction
+import com.example.paging3application.models.CharacterData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , CharacterItemInteraction {
 
 
     private val viewModel: MainViewModel by viewModels()
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             val decoration  = DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL)
             addItemDecoration(decoration)
+            characterAdapter.setListener(this@MainActivity)
             adapter = characterAdapter
 
             characterAdapter.addLoadStateListener { loadState ->
@@ -75,6 +78,11 @@ class MainActivity : AppCompatActivity() {
                 characterAdapter.submitData(it)
             }
         }
+    }
+
+    override fun characterItemOnclick(model: CharacterData) {
+
+        Toast.makeText(this@MainActivity,model.name+" clicked",Toast.LENGTH_SHORT).show()
     }
 
 

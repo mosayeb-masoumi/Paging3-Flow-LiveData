@@ -17,6 +17,7 @@ class CharacterAdapter @Inject constructor():PagingDataAdapter<CharacterData , C
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         holder.bind(getItem(position)!! , position)
+        holder.setOnListHolderListener(listener, getItem(position)!!)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
@@ -36,5 +37,11 @@ class CharacterAdapter @Inject constructor():PagingDataAdapter<CharacterData , C
                     && oldItem.species == newItem.species
         }
 
+    }
+
+
+    private var listener: CharacterItemInteraction? = null
+    fun setListener(listener: CharacterItemInteraction) {
+        this.listener = listener
     }
 }
